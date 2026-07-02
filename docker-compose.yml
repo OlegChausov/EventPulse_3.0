@@ -1,0 +1,73 @@
+services:
+
+  db:
+    image: postgres:16-alpine
+    container_name: eventpulse_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    build: .
+    container_name: eventpulse_api
+    shm_size: "2gb"
+    restart: always
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_PORT: ${DB_PORT}
+    volumes:
+      - .:/app
+      - model_data:/app/bge-m3-posters   # шарим модель между web и worker
+    command: uvicorn Event_Pulse_app.main:app --host 0.0.0.0 --port 8000
+    depends_on:
+      - db
+
+  worker:
+    build: .
+    container_name: eventpulse_worker
+    shm_size: "2gb"          # нужен для Chrome внутри воркера
+    restart: always
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_PORT: ${DB_PORT}
+    volumes:
+      - .:/app
+      - model_data:/app/bge-m3-posters   # та же модель что и у web
+    command: python parse_and_create_events_worker.py
+    depends_on:
+      - db
+      - web              # воркер стартует после того как API поднялся
+
+  gateway:
+    image: nginx:1.25-alpine
+    container_name: eventpulse_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web
+
+  adminer:
+    image: adminer:latest
+    container_name: eventpulse_adminer
+    restart: always
+    ports:
+      - "8081:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+  model_data:      # именованный volume для модели — не пересобирается при restart

@@ -1,0 +1,96 @@
+
+
+
+
+
+
+<form id="events-form" action="/profile/event/event_bulk" method="post">
+
+<table class="highlight bordered">
+
+
+
+   <thead>
+      <tr>
+        <th>
+
+        </th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>     <!-- общий чекбокс -->
+          <label>
+            <input type="checkbox" id="select-all" />
+            <span></span>
+          </label></th>
+      </tr>
+    </thead>
+
+  <tbody>
+  {% for event in events %}
+
+    {% if event.is_active %}
+    <tr>
+      <td>{{ event.title }}</td>
+      <td>{{ request.state.t.minsk_movies if event.location is none else request.state.t.vilnius if event.location|lower == "vilnius" else request.state.t.warshaw if event.location|lower == "warshaw" else event.location }}</td>
+
+
+     <td>
+  <a href="{{ event.url }}"
+     class="waves-effect waves-light btn-small blue"
+     target="_blank"
+     rel="noopener noreferrer">
+      <i class="material-icons left">cloud</i>
+    {{ request.state.t.buy_ticket }}
+  </a>
+</td>
+
+      <td>
+        <button hx-get="/profile/event/deactivate_related_query/{{ event.id }}"
+        hx-target="#query-list"
+        hx-swap="innerHTML"
+        class="waves-effect waves-light btn-small green darken-3">
+  {{ request.state.t.stop_searching }}
+</button>
+      </td>
+
+       <td>
+        <button hx-get="/profile/event/deactivate_event/{{ event.id }}"
+        hx-target="#event-list"
+        hx-swap="innerHTML"
+        class="waves-effect waves-light btn-small grey">
+  {{ request.state.t.hide_and_continue }}
+</button>
+      </td>
+        <td>
+          <label>
+            <input type="checkbox" name="selected_ids" value="{{ event.id }}" class="row-check" />
+            <span></span>
+          </label>
+        </td>
+      {% endif %}
+
+
+    {% endfor %}
+
+
+ </tbody>
+    </table>
+      <button type="submit" name="action" value="hide"
+          class="waves-effect waves-light btn grey">
+    {{ request.state.t.hide_selected_and_continue }}
+  </button>
+
+  <button type="submit" name="action" value="deactivate_related_query"
+          class="waves-effect waves-light btn green darken-3">
+    {{ request.state.t.dont_search_selected }}
+  </button>
+</form>
+
+
+  <script src="{{ url_for('static', path='js/checkbox_select_all_handler_for_event_list.js') }}"></script>
+
+
+
+

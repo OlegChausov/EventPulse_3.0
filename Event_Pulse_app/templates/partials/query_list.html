@@ -1,0 +1,70 @@
+
+
+
+
+
+
+
+
+
+<form id="querylist-form" action="/profile/query/query_bulk" method="post">
+<table class="highlight bordered">
+   <thead>
+      <tr>
+        <th>
+
+        </th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>     <!-- общий чекбокс -->
+          <label>
+            <input type="checkbox" id="select-all-queries" />
+            <span></span>
+          </label></th>
+      </tr>
+    </thead>
+  <tbody>
+  {% for query in queries %}
+
+    {% if query.is_active %}
+    <tr>
+      <td>{{ query.query_text }}</td>
+<td>{{ request.state.t.film if query.query_type|lower == "film" else request.state.t.concert if query.query_type|lower == "concert" else query.query_type }}</td>
+      <td>
+        <button hx-post="/profile/query/deactivate/{{ query.id }}"
+                hx-target="#query-list" hx-swap="innerHTML" class="waves-effect waves-light btn-small red">{{ request.state.t.dont_search }}</button>
+
+      </td>
+        <td>
+                    <td>
+          <label>
+            <input type="checkbox" name="selected_queries" value="{{ query.id }}" class="row-check" />
+            <span></span>
+          </label>
+        </td>
+        </td>
+      {% endif %}
+
+
+
+
+
+
+{% endfor %}
+  </tbody>
+</table>
+  <button type="submit" name="action" value="deactivate_related_query"
+          class="waves-effect waves-light btn red darken-3">
+    {{ request.state.t.stop_searching_selected }}
+  </button>
+</form>
+<br>
+
+
+
+
+
+
+
+  <script src="{{ url_for('static', path='js/checkbox_select_all_handler_for_query_list.js') }}"></script>

@@ -1,0 +1,32 @@
+<div class="card-panel" style="position: relative;">
+  <a href="#!"
+     class="btn-flat waves-effect close-btn"
+     style="position: absolute; top: 10px; right: 10px;"
+     onclick="const card=this.parentElement; const form=card.querySelector('form'); form.reset(); card.remove();">
+    <i class="material-icons black-text">close</i>
+  </a>
+
+  <form
+    hx-post="/profile/query/add"
+    hx-target="#query-list"
+    hx-swap="innerHTML"
+    hx-on="htmx:afterRequest: this.reset(); this.parentElement.remove()"
+  >
+    <div class="input-field">
+      <input type="text" name="query_text" placeholder="{{ request.state.t.query_placeholder }}" required>
+    </div>
+
+    <div class="input-field">
+      <select name="query_type" required>
+        <option value="" disabled selected>{{ request.state.t.choose_type }}</option>
+        <option value="concert">{{ request.state.t.concert }}</option>
+        <option value="film">{{ request.state.t.film }}</option>
+      </select>
+      <label>{{ request.state.t.event_type }}</label>
+    </div>
+
+    <button type="submit" class="btn waves-effect waves-light">
+      {{ request.state.t.add }}
+    </button>
+  </form>
+</div>

@@ -1,0 +1,37 @@
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+ <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <head>
+    <meta charset="utf-8">
+    <title>{{ request.state.t.login }}</title>
+</head>
+
+{% if not success %} {{ message }} {% endif %}
+
+<div style="max-width: 400px; margin-top: 20px; margin-left: 20px;">
+  <form method="post" action="/login">
+    <input type="text" name="name_or_email" placeholder="{{ request.state.t.login_or_email }}">
+    <input type="password" name="password" placeholder="{{ request.state.t.password }}">
+
+    <div class="btn-group" style="margin-top: 20px;">
+      <button type="submit" class="btn waves-effect waves-light blue">
+        {{ request.state.t.login }}
+        <i class="material-icons right">send</i>
+      </button>
+
+      <a href="/register" class="btn waves-effect waves-light green" style="margin-left: 10px;">
+        <i class="material-icons left">person_add</i>
+        {{ request.state.t.register_button }}
+      </a>
+    </div>
+  </form>
+
+
+
+
+
+<a href="/login/social" class="google-btn">
+  <img src="{{ url_for('static', path='images/google2.jpg') }}" alt="Google logo">
+</a>
+</div>
