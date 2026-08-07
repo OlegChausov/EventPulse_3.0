@@ -64,8 +64,10 @@ def _core_vector_match(query_text: str, event_text: str, threshold: float) -> bo
 # =====================================================================
 # УРОВЕНЬ 3: ПУБЛИЧНЫЙ ИНТЕРФЕЙС
 # =====================================================================
-def fuzzy_match(query: EventQuery, raw_event: dict, threshold: float = 0.47) -> bool:
+def fuzzy_match(query: EventQuery, raw_event: dict, threshold: float = 0.7) -> bool:
     """Точка входа: нормализует строки и отправляет в кэш пар."""
+    threshold = float(os.getenv("FUZZY_THRESHOLD", threshold))
+    
     query_text = query.query_text.strip().lower()
     event_text = raw_event.get("title", "").strip().lower()
 

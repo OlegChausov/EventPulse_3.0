@@ -1,5 +1,4 @@
 services:
-
   db:
     image: postgres:16-alpine
     container_name: eventpulse_db
@@ -17,13 +16,14 @@ services:
     shm_size: "2gb"
     restart: always
     environment:
+      DB_HOST: db
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
       DB_PORT: ${DB_PORT}
     volumes:
       - .:/app
-      - model_data:/app/bge-m3-posters   # шарим модель между web и worker
+      - model_data:/app/bge-m3-posters
     command: uvicorn Event_Pulse_app.main:app --host 0.0.0.0 --port 8000
     depends_on:
       - db
@@ -31,20 +31,21 @@ services:
   worker:
     build: .
     container_name: eventpulse_worker
-    shm_size: "2gb"          # нужен для Chrome внутри воркера
+    shm_size: "2gb"
     restart: always
     environment:
+      DB_HOST: db
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
       DB_PORT: ${DB_PORT}
     volumes:
       - .:/app
-      - model_data:/app/bge-m3-posters   # та же модель что и у web
+      - model_data:/app/bge-m3-posters
     command: python parse_and_create_events_worker.py
     depends_on:
       - db
-      - web              # воркер стартует после того как API поднялся
+      - web
 
   gateway:
     image: nginx:1.25-alpine
@@ -70,4 +71,4 @@ services:
 
 volumes:
   postgres_data:
-  model_data:      # именованный volume для модели — не пересобирается при restart
+  model_data:

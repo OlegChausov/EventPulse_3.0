@@ -115,6 +115,39 @@ This significantly reduces CPU load and speeds up matching.
 - Worker‑based parsing and matching  
 - Caching of embeddings and repeated queries  
 
+## ⚙️ Environment Variables (`.env`)
+
+Create a `.env` file in the root directory and configure the following variables:
+
+```env
+# Database
+DB_USER=
+DB_PASSWORD=
+DB_HOST=
+DB_PORT=
+DB_NAME=
+
+# Sessions (JWT)
+SECRET_KEY=
+ALGORITHM=
+ACCESS_TOKEN_EXPIRE_MINUTES=
+SLIDING_THRESHOLD_MINUTES=
+
+# Email Notifications (SMTP)
+SMTP_SERVER=
+SMTP_PORT=
+SMTP_LOGIN=
+SMTP_PASSWORD=
+
+# Google OAuth
+OAUTH0_DOMAIN=
+OAUTH0_CLIENT_ID=
+OAUTH0_CLIENT_SECRET=
+OAUTH0_REDIRECT_URI=
+
+# AI & Matching similarity threshold. 0.7 if not defined here
+FUZZY_THRESHOLD=
+
 ---
 
 ## 📸 Screenshots
@@ -262,6 +295,39 @@ EventPulse 3.0 использует дообученную модель **BAAI
 - AI‑семантический мэтчинг  
 - Вынесенный воркер  
 - Кэширование эмбеддингов и запросов  
+
+## ⚙️ Переменные окружения (`.env`)
+
+Создайте файл `.env` в корневом каталоге проекта и заполните следующие параметры:
+
+```env
+# База данных
+DB_USER=
+DB_PASSWORD=
+DB_HOST=
+DB_PORT=
+DB_NAME=
+
+# Сессии (JWT)
+SECRET_KEY=
+ALGORITHM=
+ACCESS_TOKEN_EXPIRE_MINUTES=
+SLIDING_THRESHOLD_MINUTES=
+
+# Уведомления по почте (SMTP)
+SMTP_SERVER=
+SMTP_PORT=
+SMTP_LOGIN=
+SMTP_PASSWORD=
+
+# Google OAuth
+OAUTH0_DOMAIN=
+OAUTH0_CLIENT_ID=
+OAUTH0_CLIENT_SECRET=
+OAUTH0_REDIRECT_URI=
+
+# Порог смысловой схожести для ИИ и мэтчинга (по умолчанию 0.7, если не задано)
+FUZZY_THRESHOLD=
 
 ---
 

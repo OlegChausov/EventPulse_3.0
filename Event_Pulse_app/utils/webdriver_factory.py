@@ -11,6 +11,16 @@ def get_chrome_driver() -> webdriver.Chrome:
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    
+    # Добавьте эти три строки:
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-zygote")
+    options.add_argument("--remote-debugging-port=9222")
+    # Используем 0 вместо 9222, чтобы Chrome сам выбирал свободный порт
+    options.add_argument("--remote-debugging-port=0")
+
+
+    service = None
 
     if sys.platform.startswith("win"):
         path = os.environ.get("CHROMEDRIVER_PATH")
@@ -19,5 +29,11 @@ def get_chrome_driver() -> webdriver.Chrome:
             from webdriver_manager.chrome import ChromeDriverManager
             path = ChromeDriverManager().install()
         service = Service(path)
+    else:
+        linux_path = os.environ.get("CHROMEDRIVER_PATH", "/usr/bin/chromedriver")
+        if os.path.exists(linux_path):
+            service = Service(linux_path)
+        else:
+            service = Service()
 
     return webdriver.Chrome(service=service, options=options)
