@@ -119,7 +119,7 @@ This significantly reduces CPU load and speeds up matching.
 
 Create a `.env` file in the root directory and configure the following variables:
 
-```env
+```
 # Database
 DB_USER=
 DB_PASSWORD=
@@ -147,6 +147,7 @@ OAUTH0_REDIRECT_URI=
 
 # AI & Matching similarity threshold. 0.7 if not defined here
 FUZZY_THRESHOLD=
+```
 
 ---
 
@@ -328,6 +329,7 @@ OAUTH0_REDIRECT_URI=
 
 # Порог смысловой схожести для ИИ и мэтчинга (по умолчанию 0.7, если не задано)
 FUZZY_THRESHOLD=
+```
 
 ---
 
